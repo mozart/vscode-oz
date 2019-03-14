@@ -1,6 +1,6 @@
 {
-    "name": "oz-vscode",
-    "displayName": "oz-vscode",
+    "name": "vscode-oz",
+    "displayName": "Oz",
     "description": "Mozart-Oz OPI for Visual Studio Code",
     "version": "0.0.1",
     "engines": {
@@ -12,15 +12,15 @@
     "extensionPack": [
         "publisher.extensionName"
     ],
-    "publisher": "layus",
+    "publisher": "mozart-oz",
     "license": "MIT",
-    "repository": "https://github.com/mozart/oz-vscode.git",
+    "repository": "https://github.com/mozart/vscode-oz.git",
     "keywords": [
-        "mozart",
-        "oz"
+        "Mozart",
+        "Oz"
     ],
     "bugs": {
-        "url": "https://github.com/mozart/oz-vscode/issues"
+        "url": "https://github.com/mozart/vscode-oz/issues"
     },
     "main": "./out/extension.js",
     "contributes": {
@@ -163,5 +163,9 @@
         "typescript": "^2.0.3",
         "vscode": "^1.1.30"
     },
-    "dependencies": {}
+    "dependencies": {
+        "child_process": "^1.0.2",
+        "vscode": "^1.1.30",
+        "net": "^1.0.2"
+    }
 }

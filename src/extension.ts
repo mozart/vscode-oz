@@ -1,16 +1,20 @@
+
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import * as net from 'net';
+import * as events from 'events';
 
 class OzOPIServer {
 	server: cp.ChildProcess;
 	compiler: net.Socket;
 	compilerChannel: vscode.OutputChannel;
 	emulatorChannel: vscode.OutputChannel;
+	queue: events.EventEmitter;
 
 	constructor() {
 		this.server = null;
 		this.compiler = null;
+		this.queue = new events.EventEmitter();
 		this.compilerChannel = vscode.window.createOutputChannel("Oz Compiler");
 		this.emulatorChannel = vscode.window.createOutputChannel("Oz Emulator");
 	}
@@ -29,6 +33,7 @@ class OzOPIServer {
 
 		this.server = cp.spawn("ozengine", ["x-oz://system/OPI.ozf"], opts);
 		this.server.stdout.once('data', (data: Buffer) => {
+			console.log("port received");
 			let matches = data.toString().match("'oz-socket (\\d+) (\\d+)'");
 			this.compiler = new net.Socket();
 			this.compiler.connect(matches[1]);
@@ -38,7 +43,6 @@ class OzOPIServer {
 			this.compilerChannel.clear();
 			function push(channel: vscode.OutputChannel) {
 				return function (data: Buffer) {
-					console.log(data);
 					channel.append(data.toString());
 					channel.show();
 				}
@@ -46,10 +50,14 @@ class OzOPIServer {
 			this.server.stdout.on('data', push(this.emulatorChannel));
 			this.server.stderr.on('data', push(this.emulatorChannel));
 			this.compiler.on('data', push(this.compilerChannel));
+
+			this.ready = true;
 		});
 	}
 
 	stop() {
+		this.ready = false;
+
 		if (this.compiler) {
 			this.compiler.removeAllListeners();
 			this._send("{Application.exit 0}");
@@ -73,7 +81,11 @@ class OzOPIServer {
 
 	send(data: string | Buffer) {
 		this.start();
-		this._send(data.toString());
+		if (this.ready) {
+			this.send(data.toString());
+		} else {
+			this.compiler.once('data', () => this.send(data))
+		}
 	}
 }
 
