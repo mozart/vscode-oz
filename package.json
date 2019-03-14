@@ -1,0 +1,167 @@
+{
+    "name": "oz-vscode",
+    "displayName": "oz-vscode",
+    "description": "Mozart-Oz OPI for Visual Studio Code",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.31.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "extensionPack": [
+        "publisher.extensionName"
+    ],
+    "publisher": "layus",
+    "license": "MIT",
+    "repository": "https://github.com/mozart/oz-vscode.git",
+    "keywords": [
+        "mozart",
+        "oz"
+    ],
+    "bugs": {
+        "url": "https://github.com/mozart/oz-vscode/issues"
+    },
+    "main": "./out/extension.js",
+    "contributes": {
+        "languages": [
+            {
+                "id": "oz",
+                "aliases": [
+                    "Oz",
+                    "oz",
+                    "mozart-oz",
+                    "Mozart-Oz"
+                ],
+                "extensions": [
+                    ".oz"
+                ]
+            }
+        ],
+        "grammars": [
+            {
+                "language": "oz",
+                "scopeName": "text.mozart-oz.oz",
+                "path": "./syntaxes/Oz.tmLanguage"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Oz extension configuration",
+            "properties": {
+                "oz.ozenginePath": {
+                    "type": "string",
+                    "description": "Absolute path to the ozengine binary"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "oz.halt",
+                "icon": "$(stop)",
+                "title": "Halt Oz",
+                "category": "oz.spawn"
+            },
+            {
+                "command": "oz.feedFile",
+                "icon": "$(chevron-right)",
+                "title": "Feed File",
+                "category": "oz.feed"
+            },
+            {
+                "command": "oz.feedRegion",
+                "icon": "$(chevron-right)",
+                "title": "Feed Region",
+                "category": "oz.feed"
+            },
+            {
+                "command": "oz.feedLine",
+                "icon": "$(chevron-right)",
+                "title": "Feed Line",
+                "category": "oz.feed"
+            },
+            {
+                "command": "oz.feedParagraph",
+                "icon": "$(chevron-right)",
+                "title": "Feed Paragraph",
+                "category": "oz.feed"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "resourceLangId == oz && !editorHasSelection",
+                    "command": "oz.feedFile",
+                    "group": "oz.feed"
+                },
+                {
+                    "when": "resourceLangId == oz && editorHasSelection",
+                    "command": "oz.feedRegion",
+                    "group": "oz.feed"
+                },
+                {
+                    "when": "resourceLangId == oz && !editorHasSelection",
+                    "command": "oz.feedLine",
+                    "group": "oz.feed"
+                },
+                {
+                    "when": "resourceLangId == oz && !editorHasSelection",
+                    "command": "oz.feedParagraph",
+                    "group": "oz.feed"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "command": "oz.halt",
+                "key": "ctrl+. h",
+                "mac": "cmd+. h"
+            },
+            {
+                "command": "oz.feedLine",
+                "key": "ctrl+. ctrl+l",
+                "mac": "cmd+. cmd+l",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "oz.feedFile",
+                "key": "ctrl+. ctrl+f",
+                "mac": "cmd+. cmd+f",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "oz.feedFile",
+                "key": "ctrl+. ctrl+b",
+                "mac": "cmd+. cmd+b",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "oz.feedParagraph",
+                "key": "ctrl+alt+x",
+                "mac": "cmd+alt+x",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "oz.feedRegion",
+                "key": "ctrl+. ctrl+r",
+                "mac": "cmd+. cmd+r",
+                "when": "editorHasSelection"
+            }
+        ]
+    },
+    "activationEvents": [
+        "onLanguage:oz"
+    ],
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "@types/node": "*",
+        "typescript": "^2.0.3",
+        "vscode": "^1.1.30"
+    },
+    "dependencies": {}
+}
