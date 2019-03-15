@@ -2,7 +2,7 @@
     "name": "vscode-oz",
     "displayName": "Oz",
     "description": "Mozart-Oz OPI for Visual Studio Code",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -121,31 +121,31 @@
                 "command": "oz.feedLine",
                 "key": "ctrl+. ctrl+l",
                 "mac": "cmd+. cmd+l",
-                "when": "editorTextFocus"
+                "when": "resourceLangId == oz && editorTextFocus"
             },
             {
                 "command": "oz.feedFile",
                 "key": "ctrl+. ctrl+f",
                 "mac": "cmd+. cmd+f",
-                "when": "editorTextFocus"
+                "when": "resourceLangId == oz && editorTextFocus"
             },
             {
                 "command": "oz.feedFile",
                 "key": "ctrl+. ctrl+b",
                 "mac": "cmd+. cmd+b",
-                "when": "editorTextFocus"
+                "when": "resourceLangId == oz && editorTextFocus"
             },
             {
                 "command": "oz.feedParagraph",
                 "key": "ctrl+alt+x",
                 "mac": "cmd+alt+x",
-                "when": "editorTextFocus"
+                "when": "resourceLangId == oz && editorTextFocus"
             },
             {
                 "command": "oz.feedRegion",
                 "key": "ctrl+. ctrl+r",
                 "mac": "cmd+. cmd+r",
-                "when": "editorHasSelection"
+                "when": "resourceLangId == oz && editorHasSelection"
             }
         ]
     },
@@ -161,11 +161,9 @@
     "devDependencies": {
         "@types/node": "*",
         "typescript": "^2.0.3",
-        "vscode": "^1.1.30"
+        "vscode": "^1.1.30",
+        "vsce": "^1.58.0"
     },
     "dependencies": {
-        "child_process": "^1.0.2",
-        "vscode": "^1.1.30",
-        "net": "^1.0.2"
     }
 }

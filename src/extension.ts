@@ -9,14 +9,23 @@ class OzOPIServer {
 	compiler: net.Socket;
 	compilerChannel: vscode.OutputChannel;
 	emulatorChannel: vscode.OutputChannel;
-	queue: events.EventEmitter;
+	queue: Array<string>;
+	events: events.EventEmitter;
 
 	constructor() {
 		this.server = null;
 		this.compiler = null;
-		this.queue = new events.EventEmitter();
+		this.events = new events.EventEmitter();
+		this.queue = new Array();
 		this.compilerChannel = vscode.window.createOutputChannel("Oz Compiler");
 		this.emulatorChannel = vscode.window.createOutputChannel("Oz Emulator");
+	}
+
+	private display(channel: vscode.OutputChannel) {
+		return function (data: string | Buffer) {
+			channel.show(true /* do not take focus */);
+			channel.append(data.toString());
+		}
 	}
 
 	start() {
@@ -31,9 +40,20 @@ class OzOPIServer {
 		};
 		if (vscode.workspace.rootPath) opts.cwd = vscode.workspace.rootPath;
 
-		this.server = cp.spawn("ozengine", ["x-oz://system/OPI.ozf"], opts);
+		let cmd = vscode.workspace.getConfiguration("oz").get("ozemulatorPath", "ozemulator");
+		this.server = cp.spawn(cmd, ["x-oz://system/OPI.ozf"], opts);
+		this.server.on('error', (err) => {
+			let msg = "Failed to start oz";
+			if (cmd == 'ozemulator') {
+				msg += ".\n Please verify Mozart install and/or "+
+				       "set `oz.ozemulatorPath` in your config.\n";
+			} else {
+				msg += " at "+cmd+":\n";
+			}
+			vscode.window.showErrorMessage(msg + err);
+			this.stop();
+		})
 		this.server.stdout.once('data', (data: Buffer) => {
-			console.log("port received");
 			let matches = data.toString().match("'oz-socket (\\d+) (\\d+)'");
 			this.compiler = new net.Socket();
 			this.compiler.connect(matches[1]);
@@ -41,22 +61,19 @@ class OzOPIServer {
 
 			this.emulatorChannel.clear();
 			this.compilerChannel.clear();
-			function push(channel: vscode.OutputChannel) {
-				return function (data: Buffer) {
-					channel.append(data.toString());
-					channel.show();
-				}
-			}
-			this.server.stdout.on('data', push(this.emulatorChannel));
-			this.server.stderr.on('data', push(this.emulatorChannel));
-			this.compiler.on('data', push(this.compilerChannel));
 
-			this.ready = true;
+			this.server.stdout.on('data', this.display(this.emulatorChannel));
+			this.server.stderr.on('data', this.display(this.emulatorChannel));
+			this.compiler.on('data', this.display(this.compilerChannel));
+
+			this.events.on('push', (data) => this.process_msgs());
+			this.events.emit('push');
 		});
 	}
 
 	stop() {
-		this.ready = false;
+		this.events.removeAllListeners();
+		this.queue = new Array();
 
 		if (this.compiler) {
 			this.compiler.removeAllListeners();
@@ -71,21 +88,30 @@ class OzOPIServer {
 			this.server.removeAllListeners();
 			this.server.kill();
 			this.server = null;
+
+			this.display(this.compilerChannel)("Oz halted.");
 		}
 	}
 
+	private process_msgs() {
+		let msgs = this.queue;
+		this.queue = new Array();
+
+		msgs.forEach(msg => this._send(msg));
+	}
+
 	private _send(data: string) {
-		if (!this.compiler) return;
+		if (!this.compiler) {
+			console.error("[invariant violation] Trying to send code to a dead Oz process.")
+			return;
+		}
 		this.compiler.write(data.trim() + "\n\x04\n");
 	}
 
 	send(data: string | Buffer) {
 		this.start();
-		if (this.ready) {
-			this.send(data.toString());
-		} else {
-			this.compiler.once('data', () => this.send(data))
-		}
+		this.queue.push(data.toString());
+		this.events.emit('push');
 	}
 }
 
@@ -96,7 +122,12 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(vscode.commands.registerCommand(cmd, callback));
 	}
 	function registerText(cmd: string, callback: (textEditor: vscode.TextEditor) => void) {
-		context.subscriptions.push(vscode.commands.registerTextEditorCommand(cmd, callback));
+		context.subscriptions.push(vscode.commands.registerTextEditorCommand(cmd, (textEditor) => {
+			if (textEditor.document.languageId != "oz") {
+				return;
+			}
+			callback(textEditor);
+		}));
 	}
 
 	oz.start();
@@ -119,7 +150,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let begin = textEditor.selection.start.line;
 		let end = begin;
 
-		while (begin > 0 
+		while (begin > 0
 			&& !textEditor.document.lineAt(--begin).isEmptyOrWhitespace) {}
 		while (end < textEditor.document.lineCount-1 
 			&& !textEditor.document.lineAt(++end).isEmptyOrWhitespace) {}
