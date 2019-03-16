@@ -40,13 +40,13 @@ class OzOPIServer {
 		};
 		if (vscode.workspace.rootPath) opts.cwd = vscode.workspace.rootPath;
 
-		let cmd = vscode.workspace.getConfiguration("oz").get("ozemulatorPath", "ozemulator");
+		let cmd = vscode.workspace.getConfiguration("oz").get("ozenginePath", "ozengine");
 		this.server = cp.spawn(cmd, ["x-oz://system/OPI.ozf"], opts);
 		this.server.on('error', (err) => {
 			let msg = "Failed to start oz";
-			if (cmd == 'ozemulator') {
+			if (cmd == 'ozengine') {
 				msg += ".\n Please verify Mozart install and/or "+
-				       "set `oz.ozemulatorPath` in your config.\n";
+				       "set `oz.ozenginePath` in your config.\n";
 			} else {
 				msg += " at "+cmd+":\n";
 			}
