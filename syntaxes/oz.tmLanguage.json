@@ -1,0 +1,225 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Mozart-Oz",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#entities"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#operators"
+        },
+        {
+            "include": "#constants"
+        },
+        {
+            "include": "#invalid"
+        },
+        {
+            "include": "#meta"
+        }
+    ],
+    "repository": {
+        "keywords": {
+            "patterns":
+            [
+                {
+                    "name": "keyword.control.oz",
+                    "match": "(?<!'|\")\\b(then|andthen|at|attr|choice|class|cond|declare|define|dis|div|do|elsecase|export|fail|feat|finally|for|from|functor|import|in|lazy|lock|meth|mod|not|of|or|orelse|prepare|prop|require|self|skip|then|thread|unit|end|local)\\b"
+                },
+                {
+                    "name": "keyword.control.conditional.oz",
+                    "match": "(?<!'|\")\\b(else|elseif|if)\\b"
+                },
+                {
+                    "name": "keyword.control.function.oz",
+                    "match": "(?<!'|\")\\b(fun|proc)\\b"
+                },
+                {
+                    "name": "keyword.control.trycatch.oz",
+                    "match": "(?<!'|\")\\b(catch|raise|try|finally)\\b"
+                },
+                {
+                    "name": "keyword.control.case.oz",
+                    "match": "(?<!'|\")\\b(case|of|then)\\b"
+                }
+            ]
+        },
+        "operators":
+        {
+            "patterns":
+            [
+                {
+                    "name": "keyword.operator.oz",
+                    "match": "(<:|:>|::|&|@|#|_|\\[\\]|\\.\\.\\.)"
+                },
+                {
+                    "name": "keyword.operator.assignment.oz",
+                    "match": "(\\=|\\:=)"
+                },
+                {
+                    "name": "keyword.operator.comparison.oz",
+                    "match": "<|=<|==|\\=|>=|>"
+                },
+                {
+                    "name": "keyword.control.arithmetic.oz",
+                    "match": "(\\*|\\+|\\-|/|~)|\\b(div|mod)\\b"
+                },
+                {
+                    "name": "keyword.operator.list.oz",
+                    "match": "\\b\\|\\b"
+                }
+            ]
+        },
+        "constants": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.oz",
+                    "match": "(\\d+\\.\\d+|\\d+)"
+                },
+                {
+                    "name": "constant.language.oz",
+                    "match": "\\b(false|true|nil)\\b"
+                }
+            ]
+        },
+        "entities": {
+            "patterns": [
+                {
+                    "name": "meta.function.call.oz",
+                    "match": "{([A-Z[A-z0-9]+\\.*]+|\\$)",
+                    "captures":
+                    {
+                        "1":
+                        {
+                            "name": "entity.name.function.oz"
+                        }
+                    }
+                },
+                {
+                    "name": "string.quoted.double.oz",
+                    "match": "(\")(.*?)(\")",
+                    "captures": {
+                        "1":
+                        {
+                            "name": "punctuation.definition.string.begin.oz"
+                        },
+                        "2":
+                        {
+                            "name": "string.quoted.single.oz"
+                        },
+                        "3":
+                        {
+                            "name": "punctuation.definition.string.end.oz"
+                        }
+                    }
+                },
+                {
+                    "name": "string.quoted.single.oz",
+                    "match": "(')(.*?)(')",
+                    "captures": {
+                        "1":
+                        {
+                            "name": "punctuation.definition.string.begin.oz"
+                        },
+                        "2":
+                        {
+                            "name": "string.quoted.single.oz"
+                        },
+                        "3":
+                        {
+                            "name": "punctuation.definition.string.end.oz"
+                        }
+                    }
+                },
+                {
+                    "name": "string.unquoted.oz",
+                    "match": "\\b([a-z][A-Za-z0-9]*?)\\b",
+                    "captures": {
+                        "1":
+                        {
+                            "patterns": [
+                                {
+                                    "include": "#keywords"
+                                }
+                            ],
+                            "name": "string.unquoted.oz"
+                        }
+                    }
+
+                },
+                {
+                    "name": "meta.list.position.oz",
+                    "match": "\\b[A-Z][A-Za-z0-9]*(\\.[\\d]+)\\b",
+                    "captures":
+                    {
+                        "1":
+                        {
+                            "name": "keyword.control.operator.dot.oz"
+                        }
+                    }
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.number-sign.oz",
+                    "match": "%.*$\n?"
+                },
+                {
+                    "captures": {
+						"1": {
+							"name": "meta.toc-list.banner.block.oz"
+						}
+					},
+                    "name": "comment.block.oz",
+                    "match": "^/\\* =(\\s*.*?)\\s*= \\*/$\\n?"
+                },
+				{
+					"begin": "/\\*",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.begin.oz"
+						}
+					},
+					"end": "\\*/",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.end.oz"
+						}
+					},
+					"name": "comment.block.c"
+				},
+				{
+					"match": "\\*/.*\\n",
+					"name": "invalid.illegal.stray-comment-end.oz"
+				}
+            ]
+        },
+        "invalid":
+        {
+            "patterns": [
+                {
+                    "name": "invalid.illegal.incomplete-assigment.oz",
+                    "match": "\\b[A-Z][0-9a-zA-Z]*\\s*=\\s*\\n"
+                }
+            ]
+        },
+        "meta":
+        {
+            "patterns": [
+                {
+                    "name": "meta.variable.oz",
+                    "match": "[A-Z][0-9A-z]*"
+                }
+            ]
+        }
+    },
+    "scopeName": "source.oz"
+}

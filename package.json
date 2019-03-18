@@ -26,23 +26,30 @@
     "contributes": {
         "languages": [
             {
-                "id": "oz",
-                "aliases": [
-                    "Oz",
-                    "oz",
-                    "mozart-oz",
-                    "Mozart-Oz"
-                ],
-                "extensions": [
-                    ".oz"
-                ]
+              "id": "oz",
+              "aliases": [
+                  "Oz",
+                  "oz",
+                  "mozart-oz",
+                  "Mozart-Oz"
+              ],
+              "extensions": [
+                  ".oz"
+              ],
+              "configuration": "./language-configuration.json"
             }
         ],
         "grammars": [
             {
                 "language": "oz",
-                "scopeName": "text.mozart-oz.oz",
-                "path": "./syntaxes/Oz.tmLanguage"
+                "scopeName": "source.oz",
+                "path": "./syntaxes/oz.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "oz",
+                "path": "./snippets/oz.json"
             }
         ],
         "configuration": {
