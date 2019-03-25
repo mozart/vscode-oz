@@ -2,7 +2,7 @@
     "name": "vscode-oz",
     "displayName": "Oz",
     "description": "Mozart-Oz OPI for Visual Studio Code",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -51,7 +51,8 @@
             "properties": {
                 "oz.ozenginePath": {
                     "type": "string",
-                    "description": "Absolute path to the ozengine binary"
+                    "description": "Absolute path to the ozengine binary",
+                    "default": "ozengine"
                 }
             }
         },
@@ -159,11 +160,10 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
-        "@types/node": "*",
+        "@types/node": "^11.11.6",
         "typescript": "^2.0.3",
-        "vscode": "^1.1.30",
-        "vsce": "^1.58.0"
+        "vsce": "^1.58.0",
+        "vscode": "^1.1.33"
     },
-    "dependencies": {
-    }
+    "dependencies": {}
 }

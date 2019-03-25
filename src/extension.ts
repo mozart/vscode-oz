@@ -41,8 +41,7 @@ class OzOPIServer {
 		if (vscode.workspace.rootPath) opts.cwd = vscode.workspace.rootPath;
 
 		let cmd = vscode.workspace.getConfiguration("oz").get("ozenginePath", "ozengine");
-		this.server = cp.spawn(cmd, ["x-oz://system/OPI.ozf"], opts);
-		this.server.on('error', (err) => {
+		function onError(err: any) {
 			let msg = "Failed to start oz";
 			if (cmd == 'ozengine') {
 				msg += ".\n Please verify Mozart install and/or "+
@@ -52,7 +51,15 @@ class OzOPIServer {
 			}
 			vscode.window.showErrorMessage(msg + err);
 			this.stop();
-		})
+		}
+
+		try {
+			this.server = cp.spawn(cmd, ["x-oz://system/OPI.ozf"], opts);
+		} catch (err) {
+			onError(err);
+		}
+		this.server.on('error', (err) => { onError(err); })
+
 		this.server.stdout.once('data', (data: Buffer) => {
 			let matches = data.toString().match("'oz-socket (\\d+) (\\d+)'");
 			this.compiler = new net.Socket();
