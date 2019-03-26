@@ -1,0 +1,17 @@
+sudo: false
+os: linux
+language: node_js
+node_js: 8
+
+script:
+- npm ci;
+- ./node_modules/.bin/vsce package;
+
+deploy:
+- provider: script
+  script: vsce publish -p $VS_TOKEN
+  skip_cleanup: true
+  on:
+    repo: mozart/vscode-oz
+    branch: master
+    tags: true
