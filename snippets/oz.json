@@ -1,0 +1,162 @@
+{
+    "fun":
+    {
+        "prefix": "fun",
+        "body":
+        [
+            "fun {$1}",
+            "\t$2",
+            "end"
+        ],
+        "description": "Function statement"
+    },
+    "proc":
+    {
+        "prefix": "proc",
+        "body":
+        [
+            "proc {$1}",
+            "\t$2",
+            "end"
+        ],
+        "description": "Procedure statement"
+    },
+    "if":
+    {
+        "prefix": "if",
+        "body":
+        [
+            "if ${1:condition} then",
+            "\t${2:body}",
+            "end"
+        ],
+        "description": "if statement"
+    },
+    "ifelse":
+    {
+        "prefix": "ifelse",
+        "body":
+        [
+            "if ${1:condition} then",
+            "\t${2:body}",
+            "else",
+            "\t${3:body}",
+            "end"
+        ],
+        "description": "if with else statement"
+    },
+    "elseif":
+    {
+        "prefix": "elseif",
+        "body":
+        [
+            "elseif ${1:condition} then",
+            "\t${2:body}"
+        ],
+        "description": "elseif statement"
+    },
+    "case":
+    {
+        "prefix": "case",
+        "body":
+        [
+            "case $1 of",
+            "\t${2:pattern} then",
+            "\t\t${3:body}",
+            "end"
+        ],
+        "description": "Case definition block"
+    },
+    "local":
+    {
+        "prefix": "local",
+        "body":
+        [
+            "local ${1:vNames} in",
+            "\t${2:body}",
+            "end"
+        ],
+        "description": "Local statement block"
+    },
+    "define":
+    {
+        "prefix": "define",
+        "body":
+        [
+            "define $1",
+            "\t$2",
+            "end"
+        ]
+    },
+    "raise":
+    {
+        "prefix": "raise",
+        "body":
+        [
+            "raise $1 end"
+        ],
+        "description": "Raise exception block"
+    },
+    "try":
+    {
+        "prefix": "try",
+        "body":
+        [
+            "try",
+            "\t$1",
+            "catch $2 then",
+            "\t$3",
+            "end"
+        ],
+        "description": "Try with catch block"
+    },
+    "finally":
+    {
+        "prefix": "finally",
+        "body":
+        [
+            "finally",
+            "\t$1"
+        ],
+        "description": "Finally statement"
+    },
+    "pattern":
+    {
+        "prefix": "cpattern",
+        "body":
+        [
+            "[] ${1:pattern} then $2"
+        ],
+        "description": "Pattern block"
+    },
+    "for:pattern":
+    {
+        "prefix": "for",
+        "body":
+        [
+            "for ${1:variable}",
+            "\tin ${2:iterable} do",
+            "\t\t${3:body}",
+            "end"
+        ],
+        "description": "For block"
+    },
+    "thread":
+    {
+        "prefix": "thread",
+        "body":
+        [
+            "thread",
+            "\t$1",
+            "end"
+        ]
+    },
+    "System out":
+    {
+        "prefix": "sout",
+        "body":
+        [
+            "{System.show $1}"
+        ]
+    }
+}
