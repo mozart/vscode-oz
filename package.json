@@ -26,17 +26,17 @@
     "contributes": {
         "languages": [
             {
-              "id": "oz",
-              "aliases": [
-                  "Oz",
-                  "oz",
-                  "mozart-oz",
-                  "Mozart-Oz"
-              ],
-              "extensions": [
-                  ".oz"
-              ],
-              "configuration": "./language-configuration.json"
+                "id": "oz",
+                "aliases": [
+                    "Oz",
+                    "oz",
+                    "mozart-oz",
+                    "Mozart-Oz"
+                ],
+                "extensions": [
+                    ".oz"
+                ],
+                "configuration": "./language-configuration.json"
             }
         ],
         "grammars": [
