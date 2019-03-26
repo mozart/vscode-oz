@@ -13,7 +13,7 @@
         "publisher.extensionName"
     ],
     "publisher": "mozart-oz",
-    "license": "MIT",
+    "license": "GPLv3",
     "repository": "https://github.com/mozart/vscode-oz.git",
     "keywords": [
         "Mozart",
