@@ -3,7 +3,7 @@
     "displayName": "Oz",
     "description": "Mozart-Oz OPI for Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -14,7 +14,7 @@
         "publisher.extensionName"
     ],
     "publisher": "mozart-oz",
-    "license": "GPLv3",
+    "license": "GPL-3.0-or-later",
     "repository": "https://github.com/mozart/vscode-oz.git",
     "keywords": [
         "Mozart",
@@ -168,9 +168,9 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
-        "@types/node": "^11.11.6",
+        "@types/node": "^11.11.7",
         "typescript": "^2.0.3",
-        "vsce": "^1.58.0",
+        "vsce": "^1.59.0",
         "vscode": "^1.1.33"
     },
     "dependencies": {}
