@@ -9,7 +9,7 @@ script:
 
 deploy:
 - provider: script
-  script: vsce publish -p $VS_TOKEN
+  script: ./node_modules/.bin/vsce publish -p $VS_TOKEN
   skip_cleanup: true
   on:
     repo: mozart/vscode-oz
