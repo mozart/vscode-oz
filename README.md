@@ -1,7 +1,7 @@
 vscode-oz brings the magic of Oz to vscode
 ==========================================
 
-[![Current Version](https://img.shields.io/github/release/mozart/vscode-oz.svg?style=flat-square)](https://github.com/mozart/vscode-oz)
+[![Current Version](https://img.shields.io/github/tag/mozart/vscode-oz.svg?style=flat-square)](https://github.com/mozart/vscode-oz/releases)
 [![Installs](https://vsmarketplacebadge.apphb.com/installs/mozart-oz.vscode-oz.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=mozart-oz.vscode-oz)
 [![Issues](https://img.shields.io/github/issues/mozart/vscode-oz.svg?style=flat-square)](https://github.com/mozart/vscode-oz/issues)
 
