@@ -61,6 +61,16 @@
                     "type": "string",
                     "description": "Absolute path to the ozengine binary",
                     "default": "ozengine"
+                },
+                "oz.enableLinter":{
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enables the linting of Oz files"
+                },
+                "oz.showCompilerOutput": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Shows the compiler output in the output tab"
                 }
             }
         },
