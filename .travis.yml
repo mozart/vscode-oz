@@ -5,6 +5,7 @@ node_js: 8
 
 script:
 - npm ci;
+- npm test --silent;
 - ./node_modules/.bin/vsce package;
 
 deploy:

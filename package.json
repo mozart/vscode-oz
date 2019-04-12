@@ -3,7 +3,11 @@
     "displayName": "Oz",
     "description": "Mozart-Oz OPI for Visual Studio Code",
     "icon": "images/icon.png",
-    "version": "0.0.5",
+    "galleryBanner": {
+        "color": "#fcaf3e",
+        "theme": "light"
+    },
+    "version": "1.0.0",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -62,7 +66,7 @@
                     "description": "Absolute path to the ozengine binary",
                     "default": "ozengine"
                 },
-                "oz.enableLinter":{
+                "oz.enableLinter": {
                     "type": "boolean",
                     "default": false,
                     "description": "Enables the linting of Oz files"
@@ -175,13 +179,16 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/node": "^11.11.7",
-        "typescript": "^2.0.3",
+        "@types/node": "^11.13.4",
+        "@types/mocha": "^2.2.42",
+        "typescript": "^3.4.3",
         "vsce": "^1.59.0",
-        "vscode": "^1.1.33"
+        "vscode": "^1.1.33",
+        "tslint": "^5.12.1"
     },
     "dependencies": {}
 }
