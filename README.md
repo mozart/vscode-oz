@@ -14,3 +14,8 @@ The usual shortcuts are implemented to evaluate code fragments:
 - `ctrl+. ctrl+b` (feed file)
 - `ctrl+. ctrl+r` (feed selection)
 - `ctrl+alt+x` (feed paragraph)
+
+Linter
+------
+
+To use the linter included in this extension set `oz.enableLinter` to `true`. This linter will only show any error or warning when feeding code to the engine for the current file.
