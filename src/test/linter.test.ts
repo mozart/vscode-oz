@@ -15,11 +15,20 @@ import { DiagnosticSeverity } from 'vscode';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Linter Tests", function () {
-    const filename:string = "oz_file.oz";
+    const context = {
+        fileName: "oz_file.oz",
+        line: 0,
+        character: 0,
+    }
+    const shiftedContext = {
+        fileName: "oz_file.oz",
+        line: 5,
+        character: 15,
+    }
 
     // Defines a Mocha unit test
     test("Linter Nothing", function() {
-        assert.equal(validateOz("", filename, 0,0).length, 0, "Empty String should return nothing");
+        assert.equal(validateOz("", context).length, 0, "Empty String should return nothing");
     });
 
     test("Warning: Unused Variable Lint", function() {
@@ -28,9 +37,9 @@ suite("Linter Tests", function () {
 %** local variable Y used only once
 %**
 %** in file "top level", line 7, column 10`
-        const errors = validateOz(compilerWarning, filename, 0, 0);
+        const errors = validateOz(compilerWarning, context);
         assert.equal(errors.length, 1, "one error should be reported");
-        assert.equal(errors[0].fileName, filename, "filename does not match");
+        assert.equal(errors[0].fileName, context.fileName, "filename does not match");
         assert.equal(errors[0].line, 7, "error line does not match");
         assert.equal(errors[0].column, 10, "error column does not match");
         assert.equal(errors[0].severity, DiagnosticSeverity.Warning, "reported error should be a warning");
@@ -50,7 +59,7 @@ suite("Linter Tests", function () {
 %**
 %** in file "top level", line 18, column 10
 % -------------------- accepted`
-        const errors = validateOz(compilerMessage, filename, 0, 0);
+        const errors = validateOz(compilerMessage, context);
         assert.equal(errors.length, 2, "two errors should be reported");
     });
 
@@ -60,9 +69,9 @@ suite("Linter Tests", function () {
 %** local variable Y used only once
 %**
 %** in file "top level", line 7, column 10`
-        const errors = validateOz(compilerWarning, filename, 5, 15);
+        const errors = validateOz(compilerWarning, shiftedContext);
         assert.equal(errors.length, 1, "one error should be reported");
-        assert.equal(errors[0].fileName, filename, "filename does not match");
+        assert.equal(errors[0].fileName, shiftedContext.fileName, "filename does not match");
         assert.equal(errors[0].line, 12, "error line does not match");
         assert.equal(errors[0].column, 25, "error column does not match");
     });
@@ -80,17 +89,17 @@ suite("Linter Tests", function () {
 %**
 %** in file "top level", line 11, column 7
 %** ------------------ rejected (2 errors)`
-        const errors = validateOz(compilerMessage, filename, 0, 0);
+        const errors = validateOz(compilerMessage, context);
         assert.equal(errors.length, 2, "two errors should be returned");
         const syntaxError = errors[0];
-        assert.equal(syntaxError.fileName, filename, "filename does not match");
+        assert.equal(syntaxError.fileName, context.fileName, "filename does not match");
         assert.equal(syntaxError.column, 7, "error column does not match");
         assert.equal(syntaxError.line, 11, "error line does not match");
         assert.equal(syntaxError.message, "syntax: expression at statement position", "error message does not match");
         assert.equal(syntaxError.severity, DiagnosticSeverity.Error, "error severity does not match");
 
         const baError = errors[1];
-        assert.equal(baError.fileName, filename, "filename does not match");
+        assert.equal(baError.fileName, context.fileName, "filename does not match");
         assert.equal(baError.column, 7, "error column does not match");
         assert.equal(baError.line, 11, "error line does not match");
         assert.equal(baError.message, "binding analysis: variable WW not introduced", "error message does not match");
@@ -119,15 +128,15 @@ suite("Linter Tests", function () {
 %** Application (values): {<P/2> 10}
 %** in file "top level", line 17, column 1
 %** ------------------ rejected (2 errors)`
-        const errors = validateOz(compilerMessage, filename, 0, 0);
+        const errors = validateOz(compilerMessage, context);
         assert.equal(errors.length, 2, "two errors should be reported");
-        assert.equal(errors[0].fileName, filename, "filename does not match");
+        assert.equal(errors[0].fileName, context.fileName, "filename does not match");
         assert.equal(errors[0].line, 13, "error line does not match");
         assert.equal(errors[0].column, 8, "error column does not match");
         assert.equal(errors[0].severity, DiagnosticSeverity.Error, "reported error should be a warning");
         assert.equal(errors[0].message, "static analysis: illegal arity in application", "error message does not match");
 
-        assert.equal(errors[1].fileName, filename, "filename does not match");
+        assert.equal(errors[1].fileName, context.fileName, "filename does not match");
         assert.equal(errors[1].line, 17, "error line does not match");
         assert.equal(errors[1].column, 2, "error column does not match");
         assert.equal(errors[1].severity, DiagnosticSeverity.Error, "reported error should be a warning");

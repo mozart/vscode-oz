@@ -21,6 +21,7 @@
 import cp = require('child_process');
 
 import { DiagnosticSeverity as Severity } from 'vscode';
+import { resolve } from 'path';
 
 export interface IOzMessage {
     fileName: string;
@@ -30,21 +31,28 @@ export interface IOzMessage {
     severity: Severity;
 }
 
+interface SnippetContext {
+    fileName: string,
+    line: number,
+    character: number,
+}
+
 const LINTER_START_MESSAGE = /%%vscode-oz\:linter\:filename\:(.*?)\:line\:(\d+)\:char\:(\d+)\n/;
 
-export function processCompilerOutput(compilerOutput: string) : Promise<IOzMessage[]> {
-    var validate = new Promise(
-        (resolve, reject) => {
-            let match = LINTER_START_MESSAGE.exec(compilerOutput)
-            // console.log(compilerOutput);
-            if (match !== null) {
-                let [_, filename, line, character] = match;
-                let errors: IOzMessage[] =
-                    validateOz(compilerOutput, filename, parseInt(line), parseInt(character));
-                resolve(errors);
-            }
-        });
-    return Promise.all([validate]).then(results => [].concat.apply([], results));
+export function processCompilerOutput(compilerOutput: string): IOzMessage[] {
+    let match = LINTER_START_MESSAGE.exec(compilerOutput)
+    // console.log(compilerOutput);
+    if (match !== null) {
+        let [_, fileName, line, character] = match;
+        let context: SnippetContext = {
+            fileName,
+            line: parseInt(line),
+            character: parseInt(character)
+        }
+        return validateOz(compilerOutput, context)
+    }
+    console.error("Mising magic footer")
+    return [];
 }
 
 
@@ -57,28 +65,28 @@ const staticAnalysisRegex = /\*+ static analysis.+/;
 const parseRegex = /\*+ parse.+/;
 const syntaxErrorRegex = /\*+ syntax error.+/;
 
-export function validateOz(compilerOutput: string, fileName: string, line: number, character: number): IOzMessage[] {
+export function validateOz(compilerOutput: string, context: SnippetContext): IOzMessage[] {
 
-            var errors = compilerOutput.split('%******');
-            var parsedErrors: IOzMessage[] = [];
-            errors.forEach(
-                error => {
-                    var diagnostic: IOzMessage;
-                    error = cleanErrorInput(error);
-                    if (
-                        bindAnalysisRegex.test(error)
-                        || parseRegex.test(error)
-                        || syntaxErrorRegex.test(error)) {
-                        diagnostic = parseBindAnalysis(error, fileName, line, character);
-                    }
-                    else if (staticAnalysisRegex.test(error)) {
-                        diagnostic = parseStaticAnalysis(error, fileName, line, character);
-                    }
-                    if (diagnostic != null) {
-                        parsedErrors.push(diagnostic);
-                    }
-                });
-            return parsedErrors;
+    var errors = compilerOutput.split('%******');
+    var parsedErrors: IOzMessage[] = [];
+    errors.forEach(
+        error => {
+            var diagnostic: IOzMessage;
+            error = cleanErrorInput(error);
+            if (
+                bindAnalysisRegex.test(error)
+                || parseRegex.test(error)
+                || syntaxErrorRegex.test(error)) {
+                diagnostic = parseBindAnalysis(error, context);
+            }
+            else if (staticAnalysisRegex.test(error)) {
+                diagnostic = parseStaticAnalysis(error, context);
+            }
+            if (diagnostic != null) {
+                parsedErrors.push(diagnostic);
+            }
+        });
+    return parsedErrors;
 
 
 }
@@ -91,40 +99,50 @@ function cleanErrorInput(input: string): string {
     return input;
 }
 
-function parseBindAnalysis(text: string, fileName: string, line: number, character: number): IOzMessage {
+function parseBindAnalysis(text: string, context: SnippetContext): IOzMessage {
     var regex = /\*+\s(.*?)\s(warning|error).*?\%\*\*\%\*\*\s(.*?)\%\*\*\%\*\*.*? in file "top level", line\s([0-9]+), column\s([0-9]+)/;
     var match = regex.exec(text);
     var diagnostic: IOzMessage;
     if (match != null) {
         var [_, errorType, textSeverity, message, currentLine, currentCharacter] = match;
-        var severity: Severity = textSeverity == "warning" ? Severity.Warning : Severity.Error;
-        diagnostic =
-            {
-                fileName: fileName,
-                line: line + parseInt(currentLine),
-                column: character + parseInt(currentCharacter),
-                message: (errorType + ": " + message),
-                severity: severity
-            };
+        diagnostic = compute_diagnostic(context,
+            parseInt(currentLine),
+            parseInt(currentCharacter),
+            errorType + ": " + message,
+            textSeverity
+        )
     }
     return diagnostic;
 }
 
-function parseStaticAnalysis(text: string, fileName: string, line: number, character: number): IOzMessage {
+function parseStaticAnalysis(text: string, context: SnippetContext): IOzMessage {
     var regex = /\*\*+\sstatic analysis (warning|error) \*+\%\*\*\%\*\*\s([\w+\s+]+)\%\*\*\%\*\*.*\/(.*)\sin file "top level", line\s([0-9]+).*column\s([0-9]+)/;
     var match = regex.exec(text);
     var diagnostic: IOzMessage;
     if (match != null) {
         var [_, textSeverity, message, _, currentLine, currentCharacter] = match;
-        var severity: Severity = textSeverity == "warning" ? Severity.Warning : Severity.Error;
-        diagnostic =
-            {
-                fileName: fileName,
-                line: line + parseInt(currentLine),
-                column: character + parseInt(currentCharacter) + 1,
-                message: ("static analysis: " + message),
-                severity: severity
-            };
+        diagnostic = compute_diagnostic(context,
+            parseInt(currentLine),
+            parseInt(currentCharacter),
+            "static analysis: " + message,
+            textSeverity
+        )
     }
     return diagnostic;
+}
+
+function compute_diagnostic(
+    context: SnippetContext,
+    lineOffset: number,
+    characterOffset: number,
+    message: string,
+    textSeverity: String
+): IOzMessage {
+    return {
+        fileName: context.fileName,
+        line: context.line + lineOffset,
+        column: (lineOffset == 1 ? context.character : 0) + characterOffset + 1,
+        message: ("static analysis: " + message),
+        severity: textSeverity == "warning" ? Severity.Warning : Severity.Error,
+    }
 }
