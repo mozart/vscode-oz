@@ -73,6 +73,19 @@ suite("Linter Tests", function () {
         assert.equal(errors.length, 1, "one error should be reported");
         assert.equal(errors[0].fileName, shiftedContext.fileName, "filename does not match");
         assert.equal(errors[0].line, 12, "error line does not match");
+        assert.equal(errors[0].column, 10, "error column does not match");
+    });
+
+    test("Verify offsets", function() {
+        const compilerWarning = `%******************** binding analysis warning ******************
+%**
+%** local variable Y used only once
+%**
+%** in file "top level", line 1, column 10`
+        const errors = validateOz(compilerWarning, shiftedContext);
+        assert.equal(errors.length, 1, "one error should be reported");
+        assert.equal(errors[0].fileName, shiftedContext.fileName, "filename does not match");
+        assert.equal(errors[0].line, 12, "error line does not match");
         assert.equal(errors[0].column, 25, "error column does not match");
     });
 

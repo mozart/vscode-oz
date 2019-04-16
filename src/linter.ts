@@ -123,7 +123,7 @@ function parseStaticAnalysis(text: string, context: SnippetContext): IOzMessage 
         var [_, textSeverity, message, _, currentLine, currentCharacter] = match;
         diagnostic = compute_diagnostic(context,
             parseInt(currentLine),
-            parseInt(currentCharacter),
+            parseInt(currentCharacter) + 1,
             "static analysis: " + message,
             textSeverity
         )
@@ -141,8 +141,8 @@ function compute_diagnostic(
     return {
         fileName: context.fileName,
         line: context.line + lineOffset,
-        column: (lineOffset == 1 ? context.character : 0) + characterOffset + 1,
-        message: ("static analysis: " + message),
+        column: (lineOffset == 1 ? context.character : 0) + characterOffset,
+        message: message,
         severity: textSeverity == "warning" ? Severity.Warning : Severity.Error,
     }
 }
