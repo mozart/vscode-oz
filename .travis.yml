@@ -19,9 +19,6 @@ script:
 - npm test --silent;
 - ./node_modules/.bin/vsce package;
 
-after_success:
-- bash <(curl -s https://codecov.io/bash)
-
 deploy:
 - provider: script
   script: ./node_modules/.bin/vsce publish -p $VS_TOKEN
