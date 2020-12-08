@@ -235,16 +235,23 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	registerText('oz.feedParagraph', (textEditor) => {
-		let begin = textEditor.selection.start.line;
-		let end = begin;
+		let startLine = textEditor.selection.start.line;
+		let endLine = textEditor.selection.end.line;
 
-		while (begin > 0
-			&& !textEditor.document.lineAt(--begin).isEmptyOrWhitespace) { }
-		while (end < textEditor.document.lineCount - 1
-			&& !textEditor.document.lineAt(++end).isEmptyOrWhitespace) { }
+		while (startLine > 0
+			   && !textEditor.document.lineAt(startLine - 1).isEmptyOrWhitespace) {
+			startLine -= 1;
+		}
 
-		let lastChar = textEditor.document.lineAt(end-1).range.end.character
-		let paragraph = new vscode.Selection(begin + 1, 0, end-1, lastChar);
+		while (endLine < textEditor.document.lineCount - 1
+			   && !textEditor.document.lineAt(endLine + 1).isEmptyOrWhitespace) {
+			endLine += 1;
+		}
+
+		const startCharacter = 0;
+		const endCharacter = textEditor.document.lineAt(endLine).text.length;
+
+		let paragraph = new vscode.Selection(startLine, startCharacter, endLine, endCharacter);
 		oz.send(textEditor.document.getText(paragraph), textEditor.document.fileName, paragraph.start);
 	});
 
