@@ -7,7 +7,7 @@
         "color": "#fcaf3e",
         "theme": "light"
     },
-    "version": "1.0.0",
+    "version": "1.1.0",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -183,12 +183,12 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/node": "^11.13.4",
-        "@types/mocha": "^2.2.42",
-        "typescript": "^3.4.3",
-        "vsce": "^1.59.0",
+        "@types/node": "^14.14.11",
+        "@types/mocha": "^8.2.0",
+        "typescript": "^4.1.2",
+        "vsce": "^1.81.1",
         "vscode": "^1.1.33",
-        "tslint": "^5.12.1"
+        "tslint": "^5.20.1"
     },
     "dependencies": {}
 }
