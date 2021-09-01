@@ -138,7 +138,7 @@
                     }
                 },
                 {
-                    "name": "string.unquoted.oz",
+                    "name": "meta.variable.oz",
                     "match": "\\b([a-z][A-Za-z0-9]*?)\\b",
                     "captures": {
                         "1":
@@ -148,7 +148,7 @@
                                     "include": "#keywords"
                                 }
                             ],
-                            "name": "string.unquoted.oz"
+                            "name": "meta.variable.oz"
                         }
                     }
 
