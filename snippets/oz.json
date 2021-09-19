@@ -38,9 +38,9 @@
         "body":
         [
             "if ${1:condition} then",
-            "\t${2:body}",
+            "\t${2:ifbody}",
             "else",
-            "\t${3:body}",
+            "\t${3:elsebody}",
             "end"
         ],
         "description": "if with else statement"
@@ -67,6 +67,15 @@
         ],
         "description": "Case definition block"
     },
+    "declare":
+    {
+        "prefix": "declare",
+        "body":
+        [
+            "declare "
+        ],
+        "description": "Declare statement"
+    },
     "local":
     {
         "prefix": "local",
@@ -86,7 +95,8 @@
             "define $1",
             "\t$2",
             "end"
-        ]
+        ],
+        "description": "Define statement block"
     },
     "raise":
     {
@@ -149,7 +159,8 @@
             "thread",
             "\t$1",
             "end"
-        ]
+        ],
+        "description": "Thread block"
     },
     "System out":
     {
@@ -157,6 +168,295 @@
         "body":
         [
             "{System.show $1}"
-        ]
+        ],
+        "description": "System.show function"
+    },
+    "Browse":
+    {
+        "prefix":"browse",
+        "body":
+        [
+            "{Browse $1}"
+        ],
+        "description": "Browse function"
+    },
+    "Delay":
+    {
+        "prefix":"delay",
+        "body":
+        [
+            "{Delay ${1:ms}}"
+        ],
+        "description": "Delay function"
+    },
+    "NewCell":
+    {
+        "prefix":["cell", "newcell"],
+        "body":
+        [
+            "{NewCell ${1:value}}"
+        ],
+        "description": "NewCell function"
+    },
+    "NewPort":
+    {
+        "prefix":["port", "newport"],
+        "body":
+        [
+            "{NewPort ${1:stream} ${2:streamTail}}"
+        ],
+        "description": "NewPort function"
+    },
+    "NewArray":
+    {
+        "prefix":["array", "newarray"],
+        "body":
+        [
+            "{NewArray ${1:lowIndex} ${2:highIndex} ${3:initValue}}"
+        ],
+        "description": "NewArray function"
+    },
+    "NewDictionary":
+    {
+        "prefix":["dictionary", "newdictionary"],
+        "body":
+        [
+            "{NewDictionary}"
+        ],
+        "description": "NewDictionary function"
+    },
+    "Max":
+    {
+        "prefix":"max",
+        "body":
+        [
+            "{Max $1 $2}"
+        ],
+        "description": "Max function"
+    },
+    "Min":
+    {
+        "prefix":"min",
+        "body":
+        [
+            "{Min $1 $2}"
+        ],
+        "description": "Min function"
+    },
+    "Pow":
+    {
+        "prefix":"pow",
+        "body":
+        [
+            "{Pow ${1:base} ${2:exponent}}"
+        ],
+        "description": "Pow function"
+    },
+    "Abs":
+    {
+        "prefix":"abs",
+        "body":
+        [
+            "{Abs $1}"
+        ],
+        "description": "Abs function"
+    },
+    "Sqrt":
+    {
+        "prefix":"sqrt",
+        "body":
+        [
+            "{Sqrt $1}"
+        ],
+        "description": "Sqrt function"
+    },
+    "Round":
+    {
+        "prefix":"round",
+        "body":
+        [
+            "{Round $1}"
+        ],
+        "description": "Round function"
+    },
+    "Tuple":
+    {
+        "prefix":"tup",
+        "body":
+        [
+            "$1#$2"
+        ],
+        "description": "2-element tuple"
+    },
+    "Tuple3":
+    {
+        "prefix":"tup3",
+        "body":
+        [
+            "$1#$2#$3"
+        ],
+        "description": "3-element tuple"
+    },
+    "Tuple4":
+    {
+        "prefix":"tup4",
+        "body":
+        [
+            "$1#$2#$3#$4"
+        ],
+        "description": "4-element tuple"
+    },
+    "Tuple5":
+    {
+        "prefix":"tup5",
+        "body":
+        [
+            "$1#$2#$3#$4#$5"
+        ],
+        "description": "5-element tuple"
+    },
+    "Tuple6":
+    {
+        "prefix":"tup6",
+        "body":
+        [
+            "$1#$2#$3#$4#$5#$6"
+        ],
+        "description": "6-element tuple"
+    },
+    "Tuple7":
+    {
+        "prefix":"tup7",
+        "body":
+        [
+            "$1#$2#$3#$4#$5#$6#$7"
+        ],
+        "description": "7-element tuple"
+    },
+    "Tuple8":
+    {
+        "prefix":"tup8",
+        "body":
+        [
+            "$1#$2#$3#$4#$5#$6#$7#$8"
+        ],
+        "description": "8-element tuple"
+    },
+    "Tuple9":
+    {
+        "prefix":"tup9",
+        "body":
+        [
+            "$1#$2#$3#$4#$5#$6#$7#$8#$9"
+        ],
+        "description": "9-element tuple"
+    },
+    "Tuple10":
+    {
+        "prefix":"tup10",
+        "body":
+        [
+            "$1#$2#$3#$4#$5#$6#$7#$8#$9#$10"
+        ],
+        "description": "10-element tuple"
+    },
+    "List":
+    {
+        "prefix":"lis",
+        "body":
+        [
+            "$1|$2|nil"
+        ],
+        "description": "2-element list"
+    },
+    "List3":
+    {
+        "prefix":"lis3",
+        "body":
+        [
+            "$1|$2|$3|nil"
+        ],
+        "description": "3-element list"
+    },
+    "List4":
+    {
+        "prefix":"lis4",
+        "body":
+        [
+            "$1|$2|$3|$4|nil"
+        ],
+        "description": "4-element list"
+    },
+    "List5":
+    {
+        "prefix":"lis5",
+        "body":
+        [
+            "$1|$2|$3|$4|$5|nil"
+        ],
+        "description": "5-element list"
+    },
+    "List6":
+    {
+        "prefix":"lis6",
+        "body":
+        [
+            "$1|$2|$3|$4|$5|$6|nil"
+        ],
+        "description": "6-element list"
+    },
+    "List7":
+    {
+        "prefix":"lis7",
+        "body":
+        [
+            "$1|$2|$3|$4|$5|$6|$7|nil"
+        ],
+        "description": "7-element list"
+    },
+    "List8":
+    {
+        "prefix":"lis8",
+        "body":
+        [
+            "$1|$2|$3|$4|$5|$6|$7|$8|nil"
+        ],
+        "description": "8-element list"
+    },
+    "List9":
+    {
+        "prefix":"lis9",
+        "body":
+        [
+            "$1|$2|$3|$4|$5|$6|$7|$8|$9|nil"
+        ],
+        "description": "9-element list"
+    },
+    "List10":
+    {
+        "prefix":"lis10",
+        "body":
+        [
+            "$1|$2|$3|$4|$5|$6|$7|$8|$9|$10|nil"
+        ],
+        "description": "10-element list"
+    },
+    "Record":
+    {
+        "prefix":"rec",
+        "body":
+        [
+            "${1:label}($2)"
+        ],
+        "description": "Max function"
+    },
+    "Module.link":
+    {
+        "prefix": ["module", "link"],
+        "body":
+        [
+            "[$1] = {Module.link ['x-oz://system/$1.ozf']}"
+        ],
+        "description": "Module linking"
     }
 }
