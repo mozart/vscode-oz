@@ -8,6 +8,9 @@ vscode-oz brings the magic of Oz to vscode
 
 This extension adds support for the Mozart/Oz language to Visual Studio Code. It provides code evaluation, syntax coloring, and common snippets.
 
+For this extension to work, you first have to install Oz on your machine, which is installed with the Mozart Programming System.
+Please visit the [Mozart website](http://mozart2.org/) and follow instructions.
+
 The usual shortcuts are implemented to evaluate code fragments:
 
 - `ctrl+. ctrl+l` (feed line)
