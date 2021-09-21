@@ -7,7 +7,7 @@
         "color": "#fcaf3e",
         "theme": "light"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -17,7 +17,7 @@
     "extensionPack": [
         "publisher.extensionName"
     ],
-    "publisher": "mozart-oz",
+    "publisher": "mozart-oz-student",
     "license": "GPL-3.0-or-later",
     "repository": "https://github.com/mozart/vscode-oz.git",
     "keywords": [
