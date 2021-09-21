@@ -4,8 +4,8 @@
         "prefix": "fun",
         "body":
         [
-            "fun {$1}",
-            "\t$2",
+            "fun {${1:name}}",
+            "\t${2:body}",
             "end"
         ],
         "description": "Function statement"
@@ -15,8 +15,8 @@
         "prefix": "proc",
         "body":
         [
-            "proc {$1}",
-            "\t$2",
+            "proc {${1:name}}",
+            "\t${2:body}",
             "end"
         ],
         "description": "Procedure statement"
@@ -60,9 +60,9 @@
         "prefix": "case",
         "body":
         [
-            "case $1 of",
-            "\t${2:pattern} then",
-            "\t\t${3:body}",
+            "case ${1:expression}",
+            "of ${2:pattern} then",
+            "\t${3:body}",
             "end"
         ],
         "description": "Case definition block"
@@ -81,7 +81,7 @@
         "prefix": "local",
         "body":
         [
-            "local ${1:vNames} in",
+            "local ${1:decls} in",
             "\t${2:body}",
             "end"
         ],
@@ -103,7 +103,7 @@
         "prefix": "raise",
         "body":
         [
-            "raise $1 end"
+            "raise ${1:expr} end"
         ],
         "description": "Raise exception block"
     },
@@ -113,9 +113,9 @@
         "body":
         [
             "try",
-            "\t$1",
-            "catch $2 then",
-            "\t$3",
+            "\t${1:trybody}",
+            "catch ${2:pattern} then",
+            "\t${3:catchbody}",
             "end"
         ],
         "description": "Try with catch block"
@@ -126,16 +126,16 @@
         "body":
         [
             "finally",
-            "\t$1"
+            "\t${1:body}"
         ],
         "description": "Finally statement"
     },
     "pattern":
     {
-        "prefix": "cpattern",
+        "prefix": ["cpattern", "casepattern", "pattern", "["],
         "body":
         [
-            "[] ${1:pattern} then $2"
+            "[] ${1:pattern} then ${2:body}"
         ],
         "description": "Pattern block"
     },
@@ -144,9 +144,8 @@
         "prefix": "for",
         "body":
         [
-            "for ${1:variable}",
-            "\tin ${2:iterable} do",
-            "\t\t${3:body}",
+            "for ${1:variable} in ${2:iterable} do",
+            "\t${3:body}",
             "end"
         ],
         "description": "For block"
@@ -156,9 +155,7 @@
         "prefix": "thread",
         "body":
         [
-            "thread",
-            "\t$1",
-            "end"
+            "thread ${1:body} end"
         ],
         "description": "Thread block"
     },
@@ -167,7 +164,7 @@
         "prefix": "sout",
         "body":
         [
-            "{System.show $1}"
+            "{System.show ${1:expr}"
         ],
         "description": "System.show function"
     },
@@ -176,7 +173,7 @@
         "prefix":"browse",
         "body":
         [
-            "{Browse $1}"
+            "{Browse ${1:expr}}"
         ],
         "description": "Browse function"
     },
@@ -185,7 +182,7 @@
         "prefix":"delay",
         "body":
         [
-            "{Delay ${1:ms}}"
+            "{Delay ${1:milliseconds}}"
         ],
         "description": "Delay function"
     },
@@ -230,7 +227,7 @@
         "prefix":"max",
         "body":
         [
-            "{Max $1 $2}"
+            "{Max ${1:expr} ${2:expr}}"
         ],
         "description": "Max function"
     },
@@ -239,7 +236,7 @@
         "prefix":"min",
         "body":
         [
-            "{Min $1 $2}"
+            "{Min ${1:expr} ${2:expr}}"
         ],
         "description": "Min function"
     },
@@ -257,7 +254,7 @@
         "prefix":"abs",
         "body":
         [
-            "{Abs $1}"
+            "{Abs ${1:number}}"
         ],
         "description": "Abs function"
     },
@@ -266,7 +263,7 @@
         "prefix":"sqrt",
         "body":
         [
-            "{Sqrt $1}"
+            "{Sqrt ${1:float}}"
         ],
         "description": "Sqrt function"
     },
@@ -275,7 +272,7 @@
         "prefix":"round",
         "body":
         [
-            "{Round $1}"
+            "{Round ${1:float}}"
         ],
         "description": "Round function"
     },

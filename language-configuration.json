@@ -13,7 +13,7 @@
     // symbols that are auto closed when typing
     "autoClosingPairs": [
         ["{", "}"],
-        ["[", "]"],
+        //["[", "]"], prevents [] from decrementing line indent
         ["(", ")"],
         ["\"", "\""],
         ["'", "'"],
@@ -28,7 +28,7 @@
         ["'", "'"]
     ],
     "indentationRules": {
-        "increaseIndentPattern": "(define|import|finally|raise|choice|thread|then|else|in|do|proc|meth|try|class|fun|local)(?!\\S)\\s*(?!(end\\s*)$|[\\S*\\s*]*(?<!\\S)end(?!\\S))",
-        "decreaseIndentPattern": "(?<!\\S+\\s*)(end|in)"
+        "increaseIndentPattern": "(define|import|finally|for|raise|choice|thread|then|else|in|do|proc|meth|try|class|fun|local)(?!\\S)\\s*(?!(end\\s*)$|[\\S*\\s*]*(?<!\\S)end(?!\\S))",
+        "decreaseIndentPattern": "(?<!\\S+\\s*)(end|in|\\[\\]|else|in)"
       }
 }
