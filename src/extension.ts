@@ -54,7 +54,26 @@ class OzOPIServer {
 		};
 		if (vscode.workspace.rootPath) opts.cwd = vscode.workspace.rootPath;
 
-		let cmd = vscode.workspace.getConfiguration(OZ_LANGUAGE).get("ozenginePath", "ozengine");
+		let cmd;
+		switch(process.platform){
+			case "win32":
+				cmd = "C:\\Program Files\\Mozart\\bin\\ozengine";
+				break;
+			case "darwin":
+				cmd = "/Applications/Mozart2.app/Contents/Resources/bin/ozengine";
+				break;
+			case "linux":
+				cmd = "/bin/ozengine";
+				break;
+			default:
+				cmd = "ozengine";
+				break;
+		}
+
+		if(vscode.workspace.getConfiguration(OZ_LANGUAGE).has("ozenginePath")){
+			cmd = vscode.workspace.getConfiguration(OZ_LANGUAGE).get("ozenginePath");
+		}
+		
 		function onError(err: any) {
 			let msg = "Failed to start oz";
 			if (cmd == 'ozengine') {
